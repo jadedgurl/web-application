@@ -1,26 +1,21 @@
-# Provider Block
 provider "aws" {
   region     = "us-east-1"
 }
-
-resource "aws_instance" "ec2_example" {
-  ami           = "admin-terraform-aws"
+  resource "aws_instance" "ec2_example" {
+  ami           = "ami-0715c1897453cabd1"
   instance_type =  "t2.micro"
   tags = {
     Name = "MCIT"
   }
 }
-
-
-# This null_resource will be executed everytime because of id = time().
-resource "null_resource" "null_resource_simple" {
-  
-  # Look carefully in the trigger we have assigned time() which we change value every time you run $terraform apply command.
+  # The following null resource will print message "Hello World"
+ resource "null_resource" "null_resource_simple" {
   triggers = {
-    id = time()
+    id = aws_instance.ec2_example.id
   }
-
   provisioner "local-exec" {
-    command = "echo Hello World"
+    command = <<-EOT
+      touch hello-world.txt
+    EOT
   }
-} 
+}
