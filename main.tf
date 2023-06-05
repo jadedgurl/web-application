@@ -17,7 +17,7 @@ resource "null_resource" "null_resource_simple" {
   
   # Look carefully in the trigger we have assigned time() which we change value every time you run $terraform apply command.
   triggers = {
-    id = time()
+    id = file()
   }
 
   provisioner "local-exec" {
